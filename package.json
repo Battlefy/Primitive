@@ -1,0 +1,21 @@
+{
+  "name": "primitive",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./lib/primitive.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Battlefy/Primitive.git"
+  },
+  "author": "Battlefy <info@battlefy.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Battlefy/Primitive/issues"
+  },
+  "devDependencies": {
+    "mocha": "~1.13.0"
+  }
+}
