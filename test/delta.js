@@ -73,12 +73,12 @@ describe('delta.create', function() {
     });
     d.$unset['a.c'].should.equal(1);
     d.$unset['z'].should.equal(1);
-    d.$unset['g.2'].should.equal(1);
+    d.$set['g.0'].should.equal('g');
+    d.$set['g.1'].should.equal('h');
     d.$set['b'].should.equal('b');
     d.$set['x.y'].should.equal('y');
-    d.$set['g.1'].should.equal('h');
-    d.$rename['g.1'].should.equal('g.0');
     d.$rename['a.b'].should.equal('a');
+    d.$pull['g'].should.equal('w');
   });
 
 });
@@ -89,7 +89,7 @@ describe('delta.apply', function() {
     this.data = {
       a: 'a',
       b: 'b',
-      e: 'e',
+      e: ['e', 'x'],
       x: 'x'
     };
     this.d = delta.create(this.data, {
@@ -98,7 +98,7 @@ describe('delta.apply', function() {
         c: 'c'
       },
       d: {
-        e: 'e'
+        e: ['e', 'y']
       }
     });
   });
@@ -140,8 +140,8 @@ describe('delta.apply', function() {
 
   it('renames paths from $rename', function() {
     var obj = delta.apply(this.data, this.d);
-    (obj.e === undefined).should.be.true;
-    obj.d.e.should.equal('e');
+    (obj.e[0] === undefined).should.be.true;
+    obj.d.e[0].should.equal('e');
   });
 
 });
