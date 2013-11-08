@@ -1,5 +1,5 @@
 
-var declareFunction = require('../lib/declare-function');
+var declareFunction = require('../').declareFunction;
 
 
 describe('declareFunction', function() {
