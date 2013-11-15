@@ -34,7 +34,7 @@ describe('delta.create', function() {
 
   it('adds the new data and path to $set', function() {
     var d = delta.create({}, { a: { b: 'c' }});
-    d.$set['a.b'].should.equal('c');
+    d.$set.a.b.should.equal('c');
   });
 
   it('adds $unset to the object when data is removed', function() {
@@ -44,7 +44,7 @@ describe('delta.create', function() {
 
   it('adds the path to $unset', function() {
     var d = delta.create({ a: { b: 'c' }}, {});
-    d.$unset['a.b'].should.equal(1);
+    d.$unset.a.b.should.equal(1);
   });
 
   it('adds $rename to the object when data is moved', function() {
@@ -53,32 +53,25 @@ describe('delta.create', function() {
   });
 
   it('adds the new and original path to $rename', function() {
-    var d = delta.create({ a: { b: 'c' }}, { a: 'c' });
-    d.$rename['a.b'].should.equal('a');
+    var d = delta.create({ a: { b: 'c' } }, { a: { c: 'c' } });
+    d.$rename['a.b'].should.equal('a.c');
   });
 
-  it('can handle very complex data', function() {
+  it('can arrays', function() {
     var d = delta.create({
-      a: {
-        b: 'a',
-        c: 'c',
-      },
-      z: 'z',
-      g: ['i', 'g', 'w']
+      arr: ['i', 'g', 'w']
     }, {
-      a: 'a',
-      b: 'b',
-      x: { y: 'y' },
-      g: ['g', 'h']
+      arr: ['g', 'h']
     });
-    d.$unset['a.c'].should.equal(1);
-    d.$unset['z'].should.equal(1);
-    d.$set['g.0'].should.equal('g');
-    d.$set['g.1'].should.equal('h');
-    d.$set['b'].should.equal('b');
-    d.$set['x.y'].should.equal('y');
-    d.$rename['a.b'].should.equal('a');
-    d.$pull['g'].should.equal('w');
+    d.$push.should.be.OK;
+    d.$push.arr.should.be.OK;
+    d.$push.arr.$each.should.be.OK;
+    d.$push.arr.$each[0].should.equal('h');
+    d.$pull.should.be.OK;
+    d.$pull.arr.should.be.OK;
+    d.$pull.arr.$each.should.be.OK;
+    d.$pull.arr.$each[0].should.equal('i');
+    d.$pull.arr.$each[1].should.equal('w');
   });
 
 });
@@ -86,21 +79,25 @@ describe('delta.create', function() {
 describe('delta.apply', function() {
 
   before(function() {
-    this.data = {
-      a: 'a',
-      b: 'b',
-      e: ['e', 'x'],
-      x: 'x'
-    };
-    this.d = delta.create(this.data, {
-      a: 'a',
-      b: {
-        c: 'c'
+    this.original = {
+      a: {
+        b: {
+          c: '1'
+        }
       },
-      d: {
-        e: ['e', 'y']
-      }
-    });
+      d: '2',
+      e: '3',
+      f: [1, 2, 3]
+    };
+    this.current = {
+      a: {
+        b: '1'
+      },
+      c: '2',
+      d: '3',
+      f: [2, 5, 3]
+    };
+    this.delta = delta.create(this.original, this.current);
   });
 
   it('accepts an object and a diff (object)', function() {
@@ -129,19 +126,19 @@ describe('delta.apply', function() {
   });
 
   it('adds values to the correct path from $set', function() {
-    var obj = delta.apply(this.data, this.d);
-    obj.b.c.should.equal('c');
+    var obj = delta.apply(this.original, this.delta);
+    obj.c.should.equal('2');
   });
 
   it('removes paths from $unset', function() {
-    var obj = delta.apply(this.data, this.d);
-    (obj.x === undefined).should.be.true;
+    var obj = delta.apply(this.original, this.delta);
+    (obj.e === undefined).should.be.true;
   });
 
   it('renames paths from $rename', function() {
-    var obj = delta.apply(this.data, this.d);
-    (obj.e[0] === undefined).should.be.true;
-    obj.d.e[0].should.equal('e');
+    var obj = delta.apply(this.original, this.delta);
+    (obj.e === undefined).should.be.true;
+    obj.d.should.equal('3');
   });
 
 });
