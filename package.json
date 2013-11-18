@@ -1,6 +1,6 @@
 {
   "name": "primitive",
-  "version": "0.1.7",
+  "version": "0.3.0",
   "description": "",
   "main": "./lib/primitive.js",
   "scripts": {
