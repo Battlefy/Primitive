@@ -52,7 +52,7 @@ describe('delta.create', function() {
   it('correctly detects additions', function() {
     var testCases = [
       [{ a: 1 }, { a: 1, b: 2 }, { b: 2 }],
-      [{ a: { b: 1 }}, { a: { b: 1, c: 2 }}, { a: { c: 2 }}],
+      [{ a: { b: 1 }}, { a: { b: 1, c: 2 }}, { 'a.c': 2 }],
       [{ a: { b: 1 }}, { a: { b: 1 }, c: 2 }, { c: 2 }],
     ];
 
@@ -69,7 +69,7 @@ describe('delta.create', function() {
   it('correctly detects removals', function() {
     var testCases = [
       [{ a: 1, b: 2 }, { a: 1 }, { b: 1 }],
-      [{ a: { b: 1, c: 2 }}, { a: { b: 1 }}, { a: { c: 1 }}],
+      [{ a: { b: 1, c: 2 }}, { a: { b: 1 }}, { 'a.c': 1 }],
       [{ a: { b: 1 }, c: 2 }, { a: { b: 1 }}, { c: 1 }],
     ];
 
@@ -152,7 +152,7 @@ describe('delta.apply', function() {
     var testCases = [
       [{}, { $set: { a: 1 } }, { a: 1 }],
       [{ a: 1 }, { $set: { b: 2 } }, { a: 1, b: 2 }],
-      [{ a: { b: 1 }}, { $set: { a: { c: 2 }}}, { a: { b: 1, c: 2 }}],
+      [{ a: { b: 1 }}, { $set: { 'a.c': 2 }}, { a: { b: 1, c: 2 }}],
       [{ a: { b: 1 }}, { $set: { c: 2 }}, { a: { b: 1 }, c: 2 }],
     ];
 
@@ -166,7 +166,7 @@ describe('delta.apply', function() {
     var testCases = [
       [{ a: 1 }, { $unset: { a: 1 } }, {}],
       [{ a: 1, b: 2 }, { $unset: { b: 2 } }, { a: 1 }],
-      [{ a: { b: 1, c: 2 }}, { $unset: { a: { c: 2 }}}, { a: { b: 1 }}],
+      [{ a: { b: 1, c: 2 }}, { $unset: { 'a.c': 2 }}, { a: { b: 1 }}],
       [{ a: { b: 1 }, c: 2 }, { $unset: { c: 2 }}, { a: { b: 1 }}],
     ];
 
