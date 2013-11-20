@@ -108,14 +108,14 @@ describe('delta.create', function() {
     var f1 = new Foo();
     var f2 = new Foo();
     var testCases = [
-      [{ a: [1, 1]}, { a: [1]}, { a: { $each: [1]}}],
-      [{ a: [1, 2]}, { a: [1]}, { a: { $each: [2]}}],
-      [{ a: [f1, f2]}, { a: [f1]}, { a: { $each: [f2]}}]
+      [{ a: [1, 1]}, { a: [1]}, { a: [1]}],
+      [{ a: [1, 2]}, { a: [1]}, { a: [2]}],
+      [{ a: [f1, f2]}, { a: [f1]}, { a: [f2]}]
     ];
 
     for(var i = 0; i < testCases.length; i += 1) {
       var d = delta.create(testCases[i][0], testCases[i][1]);
-      d.$pull.should.eql(testCases[i][2]);
+      d.$pullAll.should.eql(testCases[i][2]);
       (d.$rename === undefined).should.be.true;
       (d.$set === undefined).should.be.true;
       (d.$unset === undefined).should.be.true;
