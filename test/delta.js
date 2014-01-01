@@ -131,8 +131,10 @@ describe('delta.apply', function() {
   });
 
   it('returns the delta if it does not contain delta operators', function() {
+    var o = {};
     var d = {};
-    delta.apply({}, d).should.equal(d);
+    delta.apply(o, d);
+    o.should.eql(d);
   });
 
   xit('can apply renames', function() {
@@ -157,8 +159,8 @@ describe('delta.apply', function() {
     ];
 
     for(var i = 0; i < testCases.length; i += 1) {
-      var d = delta.apply(testCases[i][0], testCases[i][1]);
-      d.should.eql(testCases[i][2]);
+      delta.apply(testCases[i][0], testCases[i][1]);
+      testCases[i][0].should.eql(testCases[i][2]);
     }
   });
 
@@ -171,8 +173,8 @@ describe('delta.apply', function() {
     ];
 
     for(var i = 0; i < testCases.length; i += 1) {
-      var d = delta.apply(testCases[i][0], testCases[i][1]);
-      d.should.eql(testCases[i][2]);
+      delta.apply(testCases[i][0], testCases[i][1]);
+      testCases[i][0].should.eql(testCases[i][2]);
     }
   });
 
@@ -184,8 +186,8 @@ describe('delta.apply', function() {
     ];
 
     for(var i = 0; i < testCases.length; i += 1) {
-      var d = delta.apply(testCases[i][0], testCases[i][1]);
-      d.should.eql(testCases[i][2]);
+      delta.apply(testCases[i][0], testCases[i][1]);
+      testCases[i][0].should.eql(testCases[i][2]);
     }
   });
 
@@ -197,8 +199,8 @@ describe('delta.apply', function() {
     ];
 
     for(var i = 0; i < testCases.length; i += 1) {
-      var d = delta.apply(testCases[i][0], testCases[i][1]);
-      d.should.eql(testCases[i][2]);
+      delta.apply(testCases[i][0], testCases[i][1]);
+      testCases[i][0].should.eql(testCases[i][2]);
     }
   });
 });
