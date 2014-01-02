@@ -179,10 +179,13 @@ describe('delta.apply', function() {
   });
 
   it('can apply array removals', function() {
+    var a = {};
+    var b = {};
     var testCases = [
       [{ a: [1] }, { $pull: { a: { $each: [1] }}}, { a: []}],
       [{ a: [1] }, { $pull: { a: 1 }}, { a: []}],
-      [{ a: [1, 2] }, { $pull: { a: { $each: [1] }}}, { a: [2]}]
+      [{ a: [1, 2] }, { $pull: { a: { $each: [1] }}}, { a: [2]}],
+      [{ a: [a, b] }, { $pull: { a: { $each: [a] }}}, { a: [b]}]
     ];
 
     for(var i = 0; i < testCases.length; i += 1) {
@@ -192,10 +195,13 @@ describe('delta.apply', function() {
   });
 
   it('can apply array additions', function() {
+    var a = {};
+    var b = {};
     var testCases = [
       [{ a: [] }, { $push: { a: { $each: [1] }}}, { a: [1]}],
       [{ a: [] }, { $push: { a: 1 }}, { a: [1]}],
-      [{ a: [1] }, { $push: { a: { $each: [2] }}}, { a: [1, 2]}]
+      [{ a: [1] }, { $push: { a: { $each: [2] }}}, { a: [1, 2]}],
+      [{ a: [a] }, { $push: { a: { $each: [b] }}}, { a: [a, b]}]
     ];
 
     for(var i = 0; i < testCases.length; i += 1) {
